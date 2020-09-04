@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static ColorCode.ColorCode;
 
-namespace ColorCode
+namespace TelCo.ColorCoder
 {
     class TestsForColorCoder
     {
