@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 
 
-namespace ColorCode
+namespace TelCo.ColorCoder
 {
     class ColorCode
     {
