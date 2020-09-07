@@ -8,9 +8,15 @@ namespace Telco.ColorCoder
 {
     class NewFeature
     {
-        public static string GetManual(int numberOfMajorColors, int numberOfMinorColors)
+        public static string getFormattedLine(int pairNumber, string color_pair)
         {
             CultureInfo provider = new CultureInfo("en-us");
+            string temp = pairNumber.ToString(provider) + " - " + color_pair;
+            temp += "\n";
+            return temp;
+        }
+        public static string GetManual(int numberOfMajorColors, int numberOfMinorColors)
+        {
             int outerLoopCount = 0, innerLoopCount = 0, pairNumber = 1;
             string allPairs = "";
             for (outerLoopCount = 0; outerLoopCount < numberOfMajorColors; outerLoopCount++)
@@ -18,13 +24,12 @@ namespace Telco.ColorCoder
                 for (innerLoopCount = 0; innerLoopCount < numberOfMinorColors; innerLoopCount++)
                 {
                     ColorCode.ColorPair colorPair = ColorMap.GetColorFromPairNumber(pairNumber);
-                    string temp =pairNumber.ToString(provider)+ " - " + colorPair.ToString();
-                    temp += "\n";
-                    allPairs += temp;
+                    allPairs += getFormattedLine(pairNumber, colorPair.ToString());
                     pairNumber++;
                 }
             }
             return allPairs;
         }
+       
     }
 }
