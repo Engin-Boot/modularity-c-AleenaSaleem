@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,38 +10,65 @@ namespace Telco.ColorCoder
 {
     class TestsForColorCoder
     {
+        public static void TestExpectingColorPairwhenCalledWithAValidpairNumber
+            (int pairNumber,Color ExpectedMajor,Color ExpectedMinor) {
+            ColorCode.ColorPair testPair1 = ColorMap.GetColorFromPairNumber(pairNumber);
+            Console.WriteLine("[In]Pair Number: {0},[Out] Colors: {1}\n", pairNumber, testPair1);
+            Debug.Assert(testPair1.majorColor == ExpectedMajor);
+            Debug.Assert(testPair1.minorColor == ExpectedMinor);
+        }
+
+        public static void TestExpectingPairNumberwhenCalledWithAValidColorPair(Color Major,Color Minor,int ExpectedPairNumber) 
+        {
+            int pairNumber;
+            ColorCode.ColorPair testPair = new ColorCode.ColorPair() { majorColor = Major, minorColor = Minor };
+            pairNumber = ColorMap.GetPairNumberFromColor(testPair);
+            Console.WriteLine("[In]Colors: {0}, [Out] PairNumber: {1}\n", testPair, pairNumber);
+            Debug.Assert(pairNumber == ExpectedPairNumber);
+
+        }
+
+        public static string FakeGetManual(int numberOfMajorColors, int numberOfMinorColors)
+        {
+            int outerLoopCount = 0, innerLoopCount = 0, pairNumber = 1;
+            string allPairs = "";
+            for (outerLoopCount = 0; outerLoopCount < numberOfMajorColors; outerLoopCount++)
+            {
+                for (innerLoopCount = 0; innerLoopCount < numberOfMinorColors; innerLoopCount++)
+                {
+                    string color_pair = numberOfMajorColors.ToString();
+                    color_pair += numberOfMinorColors.ToString();
+                    //ColorCode.ColorPair colorPair = ColorMap.GetColorFromPairNumber(pairNumber);
+                    allPairs += color_pair;
+                    pairNumber++;
+                }
+            }
+            return allPairs;
+        }
         static void Main(string[] args)
         {
             int minorSize = ColorCode.colorMapMajor.Length;
             int majorSize = ColorCode.colorMapMajor.Length;
             int pairNumber = 4;
-            ColorCode.ColorPair testPair1 = ColorMap.GetColorFromPairNumber(pairNumber);
-            Console.WriteLine("[In]Pair Number: {0},[Out] Colors: {1}\n", pairNumber, testPair1);
-            Debug.Assert(testPair1.majorColor == Color.White);
-            Debug.Assert(testPair1.minorColor == Color.Brown);
+            TestExpectingColorPairwhenCalledWithAValidpairNumber(pairNumber, Color.White, Color.Brown);
+            TestExpectingColorPairwhenCalledWithAValidpairNumber(pairNumber=5, Color.White, Color.SlateGray);
+            TestExpectingColorPairwhenCalledWithAValidpairNumber(pairNumber=23, Color.Violet, Color.Green);
 
-            pairNumber = 5;
-            testPair1 = ColorMap.GetColorFromPairNumber(pairNumber);
-            Console.WriteLine("[In]Pair Number: {0},[Out] Colors: {1}\n", pairNumber, testPair1);
-            Debug.Assert(testPair1.majorColor == Color.White);
-            Debug.Assert(testPair1.minorColor == Color.SlateGray);
+            TestExpectingPairNumberwhenCalledWithAValidColorPair(Color.Yellow,Color.Green, 18);
+            TestExpectingPairNumberwhenCalledWithAValidColorPair(Color.Red, Color.Blue, 6);
 
-            pairNumber = 23;
-            testPair1 = ColorMap.GetColorFromPairNumber(pairNumber);
-            Console.WriteLine("[In]Pair Number: {0},[Out] Colors: {1}\n", pairNumber, testPair1);
-            Debug.Assert(testPair1.majorColor == Color.Violet);
-            Debug.Assert(testPair1.minorColor == Color.Green);
 
-            ColorCode.ColorPair testPair2 = new ColorCode.ColorPair() { majorColor = Color.Yellow, minorColor = Color.Green };
-            pairNumber = ColorMap.GetPairNumberFromColor(testPair2);
-            Console.WriteLine("[In]Colors: {0}, [Out] PairNumber: {1}\n", testPair2, pairNumber);
-            Debug.Assert(pairNumber == 18);
+            //Tests for getManual() function
+            string Manual = FakeGetManual(1, 1);
+            Debug.Assert(Manual == "11");
+            Console.WriteLine(Manual);
 
-            testPair2 = new ColorCode.ColorPair() { majorColor = Color.Red, minorColor = Color.Blue };
-            pairNumber = ColorMap.GetPairNumberFromColor(testPair2);
-            Console.WriteLine("[In]Colors: {0}, [Out] PairNumber: {1}", testPair2, pairNumber);
-            Debug.Assert(pairNumber == 6);
-            string Manual = NewFeature.GetManual(majorSize, minorSize);
+            Manual = FakeGetManual(1, 0);
+            Debug.Assert(Manual == "");
+            Console.WriteLine(Manual);
+
+            Manual = FakeGetManual(0,0);
+            Debug.Assert(Manual == "");
             Console.WriteLine(Manual);
         }
     }
